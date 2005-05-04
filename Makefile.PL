@@ -8,6 +8,7 @@ WriteMakefile
           'VERSION_FROM' => 'lib/CGI/Application/Plugin/Config/Context.pm',
           'PREREQ_PM' => {
                            'Test::More' => 0,
+                           'CGI::Application' => 0,
                            'Config::Context' => '0.06'
                          }
         )

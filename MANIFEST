@@ -21,6 +21,7 @@ t/09-custom-matchsections.t
 t/10-param.t
 t/11-file-caching.t
 t/12-subclass.t
+t/13-export_renaming.t
 t/conf-ConfigGeneral/02-init1.conf
 t/conf-ConfigGeneral/02-init2.conf
 t/conf-ConfigGeneral/03-path.conf
