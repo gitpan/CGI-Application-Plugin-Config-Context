@@ -1,5 +1,8 @@
 Revision history for CGI-Application-Plugin-Config-Context
 
+0.09    2005-May-4
+        - minor doc bug (wrong version listed in readme)
+
 0.08    2005-May-4
         - added test to verify Exporter::Renaming support
         - added CGI::Application as a prerequisite
