@@ -1,5 +1,8 @@
 Revision history for CGI-Application-Plugin-Config-Context
 
+0.10    2005-May-6
+        - fixing misleading skip messages in tests
+
 0.09    2005-May-4
         - minor doc bug (wrong version listed in readme)
 

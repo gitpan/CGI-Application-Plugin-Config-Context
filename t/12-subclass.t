@@ -71,7 +71,7 @@ SKIP: {
         WebApp::Foo->new(PARAMS => { conf_driver => 'ConfigScoped'  })->run;
     }
     else {
-        skip "Config::General not installed", 1;
+        skip "Config::Scoped not installed", 1;
     }
 }
 SKIP: {
