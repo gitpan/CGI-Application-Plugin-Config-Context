@@ -24,11 +24,11 @@ CGI::Application::Plugin::Config::Context - Hierarchical, context-based configur
 
 =head1 VERSION
 
-Version 0.10
+Version 0.11
 
 =cut
 
-our $VERSION = '0.10';
+our $VERSION = '0.11';
 
 =head1 SYNOPSIS
 
@@ -1073,7 +1073,7 @@ sub _default_matchsections {
 For each section, the L<section_type> param indicates what runtime
 variable the section will be matched against.  Here are the allowed values
 
-    env:     matched to the environment variable SITE_NAME (overridden by -SiteNameVar)
+    env:     matched to the environment variable SITE_NAME (overridden by site_name_var)
     module:  name of the Perl Module handling this request (e.g. MyApp::Users)
     path:    path of the request, including path_info (e.g. /cgi-bin/myapp/users.cgi/some/path)
 
@@ -1120,9 +1120,6 @@ be notified of progress on your bug as I make changes.
 
 =head1 ACKNOWLEDGEMENTS
 
-This module would not be possible without Thomas Linden's excellent
-L<Config::Context> module.
-
 Thanks to the excellent examples provided by the other
 L<CGI::Application> plugin authors:  Mark Stosberg, Michael Peters, Cees
 Hek and others.
@@ -1136,6 +1133,8 @@ Hek and others.
     Config::Context::XMLSimple
     CGI::Application::Plugin::Config::Simple
     CGI::Application::Plugin::ConfigAuto
+
+    Exporter::Renaming
 
     CGI::Application::Plugin::TT
     Template::Toolkit
