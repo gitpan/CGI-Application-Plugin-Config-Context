@@ -3,7 +3,7 @@ NAME
     configuration support for CGI::Application
 
 VERSION
-    Version 0.10
+    Version 0.12
 
 SYNOPSIS
   Simple Access to Configuration
@@ -700,7 +700,7 @@ ADVANCED USAGE
     For each section, the section_type param indicates what runtime variable
     the section will be matched against. Here are the allowed values
 
-        env:     matched to the environment variable SITE_NAME (overridden by -SiteNameVar)
+        env:     matched to the environment variable SITE_NAME (overridden by site_name_var)
         module:  name of the Perl Module handling this request (e.g. MyApp::Users)
         path:    path of the request, including path_info (e.g. /cgi-bin/myapp/users.cgi/some/path)
 
@@ -744,9 +744,6 @@ BUGS
     changes.
 
 ACKNOWLEDGEMENTS
-    This module would not be possible without Thomas Linden's excellent
-    Config::Context module.
-
     Thanks to the excellent examples provided by the other CGI::Application
     plugin authors: Mark Stosberg, Michael Peters, Cees Hek and others.
 
@@ -758,6 +755,8 @@ SEE ALSO
         Config::Context::XMLSimple
         CGI::Application::Plugin::Config::Simple
         CGI::Application::Plugin::ConfigAuto
+
+        Exporter::Renaming
 
         CGI::Application::Plugin::TT
         Template::Toolkit
