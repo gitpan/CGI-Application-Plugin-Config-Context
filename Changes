@@ -1,5 +1,8 @@
 Revision history for CGI-Application-Plugin-Config-Context
 
+0.13    2005-May-15
+        - fixed Pod coverage text
+
 0.12    2005-May-6
         - documentation fixes
 

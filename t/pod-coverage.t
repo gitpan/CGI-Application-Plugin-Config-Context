@@ -13,8 +13,8 @@ else {
 # The 'conf' sub is not documented separately.  Instead it's documented in
 # the calling syntax of every other sub.
 pod_coverage_ok(
-        "CGI::Application::Plugin::Config::General",
+        "CGI::Application::Plugin::Config::Context",
         { also_private => [ qr/^conf$/ ], },
-        "CAP::CG, POD coverage, but marking the 'conf' sub as private",
+        "CAP::CC, POD coverage, but marking the 'conf' sub as private",
 );
 
