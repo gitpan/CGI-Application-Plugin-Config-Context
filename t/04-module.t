@@ -89,12 +89,18 @@ sub test_driver_prereqs {
     my $driver = shift;
     my $driver_module = 'Config::Context::' . $driver;
     eval "require $driver_module;";
-    my @config_modules = $driver_module->config_modules;
+    die $@ if $@;
 
-    eval "require $_;" for @config_modules;
+    eval "require $driver_module;";
+    my @required_modules = $driver_module->config_modules;
 
-    if ($@) {
-        return;
+    foreach (@required_modules) {
+        eval "require $_;";
+        if ($@) {
+            return;
+        }
     }
     return 1;
+
 }
+

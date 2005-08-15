@@ -24,11 +24,11 @@ CGI::Application::Plugin::Config::Context - Hierarchical, context-based configur
 
 =head1 VERSION
 
-Version 0.13
+Version 0.15
 
 =cut
 
-our $VERSION = '0.13';
+our $VERSION = '0.15';
 
 =head1 SYNOPSIS
 
@@ -633,7 +633,7 @@ sub init {
     my $string             = delete $args{'string'};
 
     if (!$config && !$file && !$string) {
-        croak "CAP::CG->init: one of 'file', 'string' or 'config' is required";
+        croak "CAP::CC->init: one of 'file', 'string' or 'config' is required";
     }
 
     my $match_sections     = exists $args{'match_sections'}     ? delete $args{'match_sections'}      : [];
@@ -651,7 +651,7 @@ sub init {
 
 
     if (keys %args) {
-        croak "CAP::CG: unrecognized args to init: " .(join ', ', keys %args). "\n";
+        croak "CAP::CC: unrecognized args to init: " .(join ', ', keys %args). "\n";
     }
 
     unless (@$match_sections) {
@@ -813,7 +813,7 @@ sub get_current_context {
             $config = $Current_Context_Config{$name};
         }
         else {
-            croak "CAP::CG: requested config named '$name' does not exist\n";
+            croak "CAP::CC: requested config named '$name' does not exist\n";
         }
     }
     else {
@@ -834,7 +834,7 @@ sub get_current_raw_config {
             $config = $Current_Raw_Config{$name};
         }
         else {
-            croak "CAP::CG: requested config named '$name' does not exist\n";
+            croak "CAP::CC: requested config named '$name' does not exist\n";
         }
     }
     else {

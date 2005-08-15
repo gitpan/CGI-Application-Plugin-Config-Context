@@ -1,7 +1,20 @@
 Revision history for CGI-Application-Plugin-Config-Context
 
+0.14    2005-Aug-15
+        - changed old error messages from CAP::CG to CAP::CC
+        - fixed a bug in the tests for testing module prerequisites
+        - it is now possible to run the test suite while simulating the
+          absense of specific config modules.  To run the test suite
+          multiple times (each with a different selection of absent
+          modules), run:
+
+             $ perl misc/prove_without_modules.pl t/*.t
+
+          To customize this process, see the instructions at the top of
+          misc/prove_without_modules.pl
+
 0.13    2005-May-15
-        - fixed Pod coverage text
+        - fixed Pod coverage test
 
 0.12    2005-May-6
         - documentation fixes
