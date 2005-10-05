@@ -114,16 +114,3 @@ else {
 my $webapp = WebApp->new;
 $webapp->run;
 
-SKIP: {
-
-    skip "Current CGI::Application doesn't support callbacks", 2 unless $webapp->can('add_callback');
-    my $config1 = CGI::Application::Plugin::Config::Context->get_current_context;
-    my $raw_config1 = CGI::Application::Plugin::Config::Context->get_current_raw_config;
-
-    ok((ref $config1 eq 'HASH'),     '1.default config empty at end of request - hashref returned');
-    ok((scalar keys %$config1) == 0, '1.default config empty at end of request - hashref has no keys');
-
-    ok((ref $raw_config1 eq 'HASH'),     'raw1.default config empty at end of request - hashref returned');
-    ok((scalar keys %$raw_config1) == 0, 'raw1.default config empty at end of request - hashref has no keys');
-
-}

@@ -1,10 +1,9 @@
---- #YAML:1.0
+---
 name: CGI-Application-Plugin-Config-Context
-version: 0.15
+version: 0.16
 author:
   - Michael Graham <mag-perl@occamstoothbrush.com>
-abstract: |-
-  Hierarchical, context-based configuration support for CGI::Application
+abstract: 'Hierarchical, context-based configuration support for CGI::Application'
 license: perl
 requires:
   CGI::Application: 0
@@ -13,5 +12,5 @@ requires:
 provides:
   CGI::Application::Plugin::Config::Context:
     file: lib/CGI/Application/Plugin/Config/Context.pm
-    version: 0.15
-generated_by: Module::Build version 0.2607
+    version: 0.16
+generated_by: Module::Build version 0.2611

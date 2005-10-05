@@ -24,11 +24,11 @@ CGI::Application::Plugin::Config::Context - Hierarchical, context-based configur
 
 =head1 VERSION
 
-Version 0.15
+Version 0.16
 
 =cut
 
-our $VERSION = '0.15';
+our $VERSION = '0.16';
 
 =head1 SYNOPSIS
 
@@ -464,9 +464,6 @@ sub conf {
         # Named config
         if (not exists $self->{$CGIAPP_Namespace}->{'__NAMED_CONFIGS'}->{$conf_name}) {
             $self->{$CGIAPP_Namespace}->{'__NAMED_CONFIGS'}->{$conf_name} = __PACKAGE__->_new($self, $conf_name);
-            if ($self->can('add_callback')) {
-                $self->add_callback('teardown', \&_clear_all_current_configs, 'LAST');
-            }
 
         }
         return $self->{$CGIAPP_Namespace}->{'__NAMED_CONFIGS'}->{$conf_name};
@@ -475,9 +472,6 @@ sub conf {
         # Default config
         if (not exists $self->{$CGIAPP_Namespace}->{'__DEFAULT_CONFIG'}) {
             $self->{$CGIAPP_Namespace}->{'__DEFAULT_CONFIG'} = __PACKAGE__->_new($self);
-            if ($self->can('add_callback')) {
-                $self->add_callback('teardown', \&_clear_all_current_configs, 'LAST');
-            }
         }
         return $self->{$CGIAPP_Namespace}->{'__DEFAULT_CONFIG'};
     }
@@ -792,15 +786,6 @@ sub _set_current_config {
         $Default_Current_Context_Config = $context_config;
         $Default_Current_Raw_Config     = $raw_config;
     }
-}
-
-# Clears all "current configs"
-# _clear_all_current_configs();
-sub _clear_all_current_configs {
-    %Current_Context_Config         = ();
-    %Current_Raw_Config             = ();
-    $Default_Current_Context_Config = {};
-    $Default_Current_Raw_Config     = {};
 }
 
 sub get_current_context {

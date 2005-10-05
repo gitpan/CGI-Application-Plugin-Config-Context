@@ -3,7 +3,7 @@ NAME
     configuration support for CGI::Application
 
 VERSION
-    Version 0.15
+    Version 0.16
 
 SYNOPSIS
   Simple Access to Configuration

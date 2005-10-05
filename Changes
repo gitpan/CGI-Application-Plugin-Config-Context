@@ -1,6 +1,12 @@
 Revision history for CGI-Application-Plugin-Config-Context
 
-0.14    2005-Aug-15
+0.16    2005-Oct-05
+        - removed an undocumented feature: the current configuration
+          info was destroyed at teardown time.  While clever, this
+          wasn't actually very useful, and it made some things
+          impossible (such as accessing the config after the app ends).
+
+0.15    2005-Aug-15
         - changed old error messages from CAP::CG to CAP::CC
         - fixed a bug in the tests for testing module prerequisites
         - it is now possible to run the test suite while simulating the
