@@ -6,6 +6,11 @@
 use strict;
 use warnings;
 
+my $Config_File            = 't/testconf.conf';
+my $Containing_Config_File = 't/testconf-container.conf';
+my $Included_File          = 'testconf.conf';
+
+my $Files_Method_Supported = 1;
 
 use Test::More;
 eval { require Config::General; };
@@ -14,16 +19,17 @@ if ($@) {
     plan 'skip_all' => "Config::General not installed"
 }
 else {
-    plan 'no_plan';
+    if (WebApp::Foo::Bar::Baz::write_config($Config_File, 'test')) {
+        unlink $Config_File;
+        plan 'no_plan';
+    }
+    else {
+        plan 'skip_all' => "Cannot set timestamp on files created in current directory";
+    }
 }
 
 
 
-my $Config_File            = 't/testconf.conf';
-my $Containing_Config_File = 't/testconf-container.conf';
-my $Included_File          = 'testconf.conf';
-
-my $Files_Method_Supported = 1;
 
 eval { require Config::General };
 
@@ -90,12 +96,17 @@ if ($Config::General::VERSION < 2.28) {
 
         delete_config();
 
+        # This is necessary to prevent Cwd::abs_path failing on some platforms
+        # when the file does not exist
+        # abs_path of the file is used as the key in the cache
+        touch_config($Config_File);
+
         eval {
             $self->conf('06')->init(
                 file              => $Config_File,
             );
         };
-        ok(!$@, 'Delete, Caching ON, no error');
+        ok(!$@, 'Delete, Caching ON, no error') or die "$@";
         ok($self->conf('05')->raw eq $self->conf('06')->raw, 'Delete, Caching ON:  underlying config identical');
 
         # Delete file in between first and second read (caching OFF)
@@ -115,6 +126,8 @@ if ($Config::General::VERSION < 2.28) {
         };
         ok($@, 'Delete, Caching OFF, error thrown');
 
+
+        write_original_config();
 
 
         # Modify before statconfig runs out
@@ -276,7 +289,7 @@ if ($Config::General::VERSION < 2.28) {
             truck    = red
         };
 
-        write_config($filename, $config);
+        write_config($filename, $config) or diag "failed to set timestamps on file: $Config_File\n";
     }
     sub write_containing_config {
         my $filename = $Containing_Config_File;
@@ -285,7 +298,7 @@ if ($Config::General::VERSION < 2.28) {
             container = 1
         };
 
-        write_config($filename, $config);
+        write_config($filename, $config) or diag "failed to set timestamps on file: $Config_File\n";
     }
 
     sub write_modified_config {
@@ -296,7 +309,7 @@ if ($Config::General::VERSION < 2.28) {
             fruit    = plum
             truck    = red
         };
-        write_config($filename, $config);
+        write_config($filename, $config) or diag "failed to set timestamps on file: $Config_File\n";
     }
 
     sub write_modified_same_size_config {
@@ -307,7 +320,7 @@ if ($Config::General::VERSION < 2.28) {
             fruit    = banana
             truck    = RED
         };
-        write_config($filename, $config);
+        write_config($filename, $config) or diag "failed to set timestamps on file: $Config_File\n";
     }
 
     sub delete_config {
@@ -321,11 +334,26 @@ if ($Config::General::VERSION < 2.28) {
         my $filename = shift;
         my $config   = shift;
         open my $fh, '>', $filename or die "Can't clobber temporary config file $filename: $!\n";
-        print $fh $config;
+        print $fh $config or die "Can't write to temporary config file $filename: $!\n";
         close $fh;
+
+        # Attempt to update the timestamp on the file to the current time
+        my $time = time;
+        utime $time, $time, $filename;
+
+        my ($mtime) = (stat $filename)[9];
+
+        my $diff = $mtime - $time;
+        return if $diff;
+        return 1;
+
     }
 
-
+    sub touch_config {
+        my $filename = shift;
+        open my $fh, '>', $filename or die "Can't clobber temporary config file $filename: $!\n";
+        close $fh;
+    }
 }
 
 my $webapp = WebApp::Foo::Bar::Baz->new;

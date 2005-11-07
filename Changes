@@ -1,5 +1,18 @@
 Revision history for CGI-Application-Plugin-Config-Context
 
+0.17    2005-Nov-06
+        - there are no code changes to the Config::Context itself in this
+          release.  The only changes are to the test suite and
+          documentation.
+        - fixed documentation typo in Multiple named Configurations (Ron Savage)
+        - fixed warnings about test XML files not having explicit
+          character encodings (in newer versions of SAX::Parser::PurePerl)
+        - fixed test failures on some platforms where Cwd::abs_path
+          fails on a non-existent file
+        - changed misc/prove_without_modules.pl to misc/prove_prereqs.pl
+        - changed t/skip_lib to t/prereq_scenarios
+
+
 0.16    2005-Oct-05
         - removed an undocumented feature: the current configuration
           info was destroyed at teardown time.  While clever, this

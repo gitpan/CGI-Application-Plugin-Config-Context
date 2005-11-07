@@ -24,11 +24,11 @@ CGI::Application::Plugin::Config::Context - Hierarchical, context-based configur
 
 =head1 VERSION
 
-Version 0.16
+Version 0.17
 
 =cut
 
-our $VERSION = '0.16';
+our $VERSION = '0.17';
 
 =head1 SYNOPSIS
 
@@ -229,7 +229,7 @@ You can use more than one configuration by providing a name to the
 C<conf> method:
 
     $self->conf('database')->init(
-        file   => 'app.conf',
+        file   => 'db.conf',
         driver => 'ConfigGeneral',
     );
     $self->conf('application')->init(

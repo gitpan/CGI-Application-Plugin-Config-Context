@@ -1,7 +1,8 @@
 #!/bin/sh
 
-rm MANIFEST
 misc/makedocs.pl
+perl -I../Config-Context/lib ./Build.PL
+rm MANIFEST
 perl -I../Config-Context/lib ./Build.PL
 perl -I../Config-Context/lib ./Build
 perl -I../Config-Context/lib ./Build manifest

@@ -1,6 +1,6 @@
 ---
 name: CGI-Application-Plugin-Config-Context
-version: 0.16
+version: 0.17
 author:
   - Michael Graham <mag-perl@occamstoothbrush.com>
 abstract: 'Hierarchical, context-based configuration support for CGI::Application'
@@ -12,5 +12,5 @@ requires:
 provides:
   CGI::Application::Plugin::Config::Context:
     file: lib/CGI/Application/Plugin/Config/Context.pm
-    version: 0.16
+    version: 0.17
 generated_by: Module::Build version 0.2611

@@ -3,7 +3,7 @@ NAME
     configuration support for CGI::Application
 
 VERSION
-    Version 0.16
+    Version 0.17
 
 SYNOPSIS
   Simple Access to Configuration
@@ -194,7 +194,7 @@ DESCRIPTION
     "conf" method:
 
         $self->conf('database')->init(
-            file   => 'app.conf',
+            file   => 'db.conf',
             driver => 'ConfigGeneral',
         );
         $self->conf('application')->init(
