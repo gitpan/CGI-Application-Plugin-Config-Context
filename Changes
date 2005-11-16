@@ -1,7 +1,15 @@
 Revision history for CGI-Application-Plugin-Config-Context
 
+0.18    2005-Nov-16
+        - there are no code changes to the module itself in this
+          release.  The only changes are to the test suite.
+        - fixed a bug in 07-nested.t revealed by CGI version 3.11
+          (thanks to Ron Savage for helping track this down)
+        - added some diagnostics to 11-file-caching.t, which still
+          seems problematic on some setups.
+
 0.17    2005-Nov-06
-        - there are no code changes to the Config::Context itself in this
+        - there are no code changes to the module itself in this
           release.  The only changes are to the test suite and
           documentation.
         - fixed documentation typo in Multiple named Configurations (Ron Savage)

@@ -49,6 +49,8 @@ my @Scenarios = qw(
     t/prereq_scenarios/skip_config_scoped
     t/prereq_scenarios/skip_xml_simple
     t/prereq_scenarios/skip_xml_simple+config_scoped
+    t/prereq_scenarios/cgi-3.10
+    t/prereq_scenarios/cgi-3.11
 );
 
 ###################################################################

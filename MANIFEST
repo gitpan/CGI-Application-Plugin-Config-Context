@@ -54,9 +54,4 @@ t/conf-XMLSimple/09-custom-matchsections.conf
 t/conf-XMLSimple/12-module.conf
 t/pod-coverage.t
 t/pod.t
-t/prereq_scenarios/skip_config_general/Config/General.pm
-t/prereq_scenarios/skip_config_scoped/Config/Scoped.pm
-t/prereq_scenarios/skip_xml_simple+config_scoped/Config/Scoped.pm
-t/prereq_scenarios/skip_xml_simple+config_scoped/XML/Simple.pm
-t/prereq_scenarios/skip_xml_simple/XML/Simple.pm
 TODO

@@ -11,3 +11,5 @@ CVS
 ^[^/]*\.html$
 \.gz$
 ^MANIFEST\.hand-rolled\.txt$
+^misc/debugging
+^t/prereq_scenarios

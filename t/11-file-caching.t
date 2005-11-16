@@ -19,16 +19,24 @@ if ($@) {
     plan 'skip_all' => "Config::General not installed"
 }
 else {
-    if (WebApp::Foo::Bar::Baz::write_config($Config_File, 'test')) {
-        unlink $Config_File;
+    my $test_config = q{
+        some  = 1
+        data  = 0
+        to    = 1
+        make  = 0
+        the   = 1
+        file  = 0
+        gods  = 1
+        happy = ?
+    };
+    if (WebApp::Foo::Bar::Baz::write_config($Config_File, $test_config)) {
         plan 'no_plan';
     }
     else {
         plan 'skip_all' => "Cannot set timestamp on files created in current directory";
     }
+    unlink $Config_File;
 }
-
-
 
 
 eval { require Config::General };
@@ -266,13 +274,7 @@ if ($Config::General::VERSION < 2.28) {
             delete_containing_config();
 
         }
-
-
         delete_config();
-
-
-
-
     }
 
     sub default {
@@ -344,6 +346,11 @@ if ($Config::General::VERSION < 2.28) {
         my ($mtime) = (stat $filename)[9];
 
         my $diff = $mtime - $time;
+        if ($diff) {
+            my $abs_path               = Cwd::abs_path($filename);
+            my $age_compared_to_script = -M $filename;
+            diag "timestamps details: file: $abs_path; time: $time; mtime: $mtime: diff: $diff; -M: $age_compared_to_script\n";
+        }
         return if $diff;
         return 1;
 

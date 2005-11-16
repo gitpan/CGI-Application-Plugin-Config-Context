@@ -4,6 +4,8 @@ use warnings;
 
 use Test::More 'no_plan';
 
+my $Config;
+
 {
     package WebApp::Foo::Bar::Baz;
     use Test::More;
@@ -23,12 +25,8 @@ use Test::More 'no_plan';
             'start' => 'default',
         );
 
-        $ENV{'SCRIPT_NAME'} = '/tony';
-        $ENV{'PATH_INFO'}   = '/baz';
-        $ENV{'SITE_NAME'}   = 'fred';
-
         my $conf_driver = $self->conf_driver;
-        $self->conf('one')->init(
+        $self->conf->init(
             file   => "t/conf-$conf_driver/07-nested.conf",
             driver => $conf_driver,
             driver_options => {
@@ -39,134 +37,93 @@ use Test::More 'no_plan';
                 }
             }
         );
-
-        $ENV{'SCRIPT_NAME'} = '/tony';
-        $ENV{'PATH_INFO'}   = '/simon';
-        $ENV{'SITE_NAME'}   = 'fred';
-
-        $self->conf('two')->init(
-            file   => "t/conf-$conf_driver/07-nested.conf",
-            driver => $conf_driver,
-            driver_options => {
-                ConfigScoped => {
-                    warnings => {
-                        permissions => 'off',
-                    }
-                }
-            }
-        );
-
-
-        $ENV{'SCRIPT_NAME'} = '/tony';
-        $ENV{'PATH_INFO'}   = '/simon';
-        $ENV{'SITE_NAME'}   = 'wubba';
-
-        $self->conf('three')->init(
-            file   => "t/conf-$conf_driver/07-nested.conf",
-            driver => $conf_driver,
-            driver_options => {
-                ConfigScoped => {
-                    warnings => {
-                        permissions => 'off',
-                    }
-                }
-            }
-        );
-
-        $ENV{'SCRIPT_NAME'} = '/baker';
-        $ENV{'PATH_INFO'}   = '/fred';
-        $ENV{'SITE_NAME'}   = 'gordon';
-
-        $self->conf('four')->init(
-            file   => "t/conf-$conf_driver/07-nested.conf",
-            driver => $conf_driver,
-            driver_options => {
-                ConfigScoped => {
-                    warnings => {
-                        permissions => 'off',
-                    }
-                }
-            }
-        );
-
-        $ENV{'SCRIPT_NAME'} = '/tony';
-        $ENV{'PATH_INFO'}   = '';
-        $ENV{'SITE_NAME'}   = 'gordon';
-
-        $self->conf('five')->init(
-            file   => "t/conf-$conf_driver/07-nested.conf",
-            driver => $conf_driver,
-            driver_options => {
-                ConfigScoped => {
-                    warnings => {
-                        permissions => 'off',
-                    }
-                }
-            }
-        );
-
+        $Config = $self->conf->context;
     }
-
     sub default {
-        my $self = shift;
-
-        my $config;
-
-        # site=fred; loc=/tony/baz
-        $config = $self->conf('one')->context;
-        is($config->{'foo'},             1,        $self->conf_driver . ': 1.foo');
-        ok(!$config->{'gordon'},                   $self->conf_driver . ': 1.gordon');
-        is($config->{'slash_tony'},      1,        $self->conf_driver . ': 1./tony');
-        is($config->{'fred'},            1,        $self->conf_driver . ': 1.fred');
-        ok(!$config->{'simon'},                    $self->conf_driver . ': 1.simon');
-        is($config->{'winner'},          'foo',    $self->conf_driver . ': 1.winner');  # not longest, but most deeply nested
-        is($config->{'location_winner'}, '/tony',  $self->conf_driver . ': 1.location_winner');
-        is($config->{'site_winner'},     'fred',   $self->conf_driver . ': 1.site_winner');
-        is($config->{'app_winner'},      'foo',    $self->conf_driver . ': 1.app_winner');
-
-        # site=wubba; loc=/tony/simon
-        $config = $self->conf('three')->context;
-        ok(!$config->{'foo'},                      $self->conf_driver . ': 2.foo');
-        ok(!$config->{'gordon'},                   $self->conf_driver . ': 2.gordon');
-        is($config->{'slash_tony'},      1,        $self->conf_driver . ': 2./tony');
-        ok(!$config->{'fred'},                     $self->conf_driver . ': 2.fred');
-        ok(!$config->{'simon'},                    $self->conf_driver . ': 2.simon');
-        is($config->{'winner'},          '/tony',  $self->conf_driver . ': 2.winner');
-        is($config->{'location_winner'}, '/tony',  $self->conf_driver . ': 2.location_winner');
-        ok(!$config->{'site_winner'},              $self->conf_driver . ': 2.site_winner');
-        ok(!$config->{'app_winner'},               $self->conf_driver . ': 2.app_winner');
-
-        # site=gordon; loc=/baker/fred
-        $config = $self->conf('four')->context;
-        ok(!$config->{'foo'},                      $self->conf_driver . ': 3.foo');
-        ok(!$config->{'gordon'},                   $self->conf_driver . ': 3.gordon');
-        ok(!$config->{'slash_tony'},               $self->conf_driver . ': 3./tony');
-        ok(!$config->{'fred'},                     $self->conf_driver . ': 3.fred');
-        ok(!$config->{'simon'},                    $self->conf_driver . ': 3.simon');
-        ok(!$config->{'winner'},                   $self->conf_driver . ': 3.winner');
-        ok(!$config->{'location_winner'},          $self->conf_driver . ': 3.location_winner');
-        ok(!$config->{'site_winner'},              $self->conf_driver . ': 3.site_winner');
-        ok(!$config->{'app_winner'},               $self->conf_driver . ': 3.app_winner');
-
-        # site=gordon; loc=/tony
-        $config = $self->conf('five')->context;
-        ok(!$config->{'foo'},                      $self->conf_driver . ': 4.foo');
-        is($config->{'gordon'},          1,        $self->conf_driver . ': 4.gordon');
-        is($config->{'slash_tony'},      1,        $self->conf_driver . ': 4./tony');
-        ok(!$config->{'fred'},                     $self->conf_driver . ': 4.fred');
-        ok(!$config->{'simon'},                    $self->conf_driver . ': 4.simon');
-        is($config->{'winner'},          'gordon', $self->conf_driver . ': 4.winner');  # not longest or highest priority, but most deeply nested
-        is($config->{'location_winner'}, '/tony',  $self->conf_driver . ': 4.location_winner');
-        is($config->{'site_winner'},     'gordon', $self->conf_driver . ': 4.site_winner');
-        ok(!$config->{'app_winner'},               $self->conf_driver . ': 4.app_winner');
-
-        return "";
+        '';
     }
 }
 
+sub run_the_tests {
+    my $conf_driver = shift;
+
+    my $config;
+
+    $ENV{'SCRIPT_NAME'} = '/tony';
+    $ENV{'PATH_INFO'}   = '/baz';
+    $ENV{'SITE_NAME'}   = 'fred';
+
+    WebApp::Foo::Bar::Baz->new(PARAMS => { conf_driver => $conf_driver })->run;
+
+    # site=fred; loc=/tony/baz
+    is($Config->{'foo'},             1,        $conf_driver . ': 1.foo');
+    ok(!$Config->{'gordon'},                   $conf_driver . ': 1.gordon');
+    is($Config->{'slash_tony'},      1,        $conf_driver . ': 1./tony');
+    is($Config->{'fred'},            1,        $conf_driver . ': 1.fred');
+    ok(!$Config->{'simon'},                    $conf_driver . ': 1.simon');
+    is($Config->{'winner'},          'foo',    $conf_driver . ': 1.winner');  # not longest, but most deeply nested
+    is($Config->{'location_winner'}, '/tony',  $conf_driver . ': 1.location_winner');
+    is($Config->{'site_winner'},     'fred',   $conf_driver . ': 1.site_winner');
+    is($Config->{'app_winner'},      'foo',    $conf_driver . ': 1.app_winner');
+
+
+    $ENV{'SCRIPT_NAME'} = '/tony';
+    $ENV{'PATH_INFO'}   = '/simon';
+    $ENV{'SITE_NAME'}   = 'wubba';
+
+    WebApp::Foo::Bar::Baz->new(PARAMS => { conf_driver => $conf_driver })->run;
+
+    # site=wubba; loc=/tony/simon
+    ok(!$Config->{'foo'},                      $conf_driver . ': 2.foo');
+    ok(!$Config->{'gordon'},                   $conf_driver . ': 2.gordon');
+    is($Config->{'slash_tony'},      1,        $conf_driver . ': 2./tony');
+    ok(!$Config->{'fred'},                     $conf_driver . ': 2.fred');
+    ok(!$Config->{'simon'},                    $conf_driver . ': 2.simon');
+    is($Config->{'winner'},          '/tony',  $conf_driver . ': 2.winner');
+    is($Config->{'location_winner'}, '/tony',  $conf_driver . ': 2.location_winner');
+    ok(!$Config->{'site_winner'},              $conf_driver . ': 2.site_winner');
+    ok(!$Config->{'app_winner'},               $conf_driver . ': 2.app_winner');
+
+    $ENV{'SCRIPT_NAME'} = '/baker';
+    $ENV{'PATH_INFO'}   = '/fred';
+    $ENV{'SITE_NAME'}   = 'gordon';
+
+    WebApp::Foo::Bar::Baz->new(PARAMS => { conf_driver => $conf_driver })->run;
+
+    # site=gordon; loc=/baker/fred
+    ok(!$Config->{'foo'},                      $conf_driver . ': 3.foo');
+    ok(!$Config->{'gordon'},                   $conf_driver . ': 3.gordon');
+    ok(!$Config->{'slash_tony'},               $conf_driver . ': 3./tony');
+    ok(!$Config->{'fred'},                     $conf_driver . ': 3.fred');
+    ok(!$Config->{'simon'},                    $conf_driver . ': 3.simon');
+    ok(!$Config->{'winner'},                   $conf_driver . ': 3.winner');
+    ok(!$Config->{'location_winner'},          $conf_driver . ': 3.location_winner');
+    ok(!$Config->{'site_winner'},              $conf_driver . ': 3.site_winner');
+    ok(!$Config->{'app_winner'},               $conf_driver . ': 3.app_winner');
+
+    $ENV{'SCRIPT_NAME'} = '/tony';
+    $ENV{'PATH_INFO'}   = '';
+    $ENV{'SITE_NAME'}   = 'gordon';
+
+    WebApp::Foo::Bar::Baz->new(PARAMS => { conf_driver => $conf_driver })->run;
+
+    # site=gordon; loc=/tony
+    ok(!$Config->{'foo'},                      $conf_driver . ': 4.foo');
+    is($Config->{'gordon'},          1,        $conf_driver . ': 4.gordon');
+    is($Config->{'slash_tony'},      1,        $conf_driver . ': 4./tony');
+    ok(!$Config->{'fred'},                     $conf_driver . ': 4.fred');
+    ok(!$Config->{'simon'},                    $conf_driver . ': 4.simon');
+    is($Config->{'winner'},          'gordon', $conf_driver . ': 4.winner');  # not longest or highest priority, but most deeply nested
+    is($Config->{'location_winner'}, '/tony',  $conf_driver . ': 4.location_winner');
+    is($Config->{'site_winner'},     'gordon', $conf_driver . ': 4.site_winner');
+    ok(!$Config->{'app_winner'},               $conf_driver . ': 4.app_winner');
+
+}
+
+
 SKIP: {
     if (test_driver_prereqs('ConfigGeneral')) {
-        WebApp::Foo::Bar::Baz->new(PARAMS => { conf_driver => 'ConfigGeneral' })->run;
+        run_the_tests('ConfigGeneral');
     }
     else {
         skip "Config::General not installed", 36;
@@ -174,7 +131,7 @@ SKIP: {
 }
 SKIP: {
     if (test_driver_prereqs('ConfigScoped')) {
-        WebApp::Foo::Bar::Baz->new(PARAMS => { conf_driver => 'ConfigScoped'  })->run;
+        run_the_tests('ConfigScoped');
     }
     else {
         skip "Config::Scoped not installed", 36;
@@ -182,7 +139,7 @@ SKIP: {
 }
 SKIP: {
     if (test_driver_prereqs('XMLSimple')) {
-        WebApp::Foo::Bar::Baz->new(PARAMS => { conf_driver => 'XMLSimple'     })->run;
+        run_the_tests('XMLSimple');
     }
     else {
         skip "XML::Simple, XML::SAX or XML::Filter::XInclude not installed", 36;
